@@ -1,7 +1,7 @@
 '
 '
 '
-' dE_1976 = 2.3 -> JND (just noticeable difference).
+' dE_1976 = 2.3 -> JND (just noticeable difference). For the rest, the consensus is that the JND inflection point corresponds to a value of 1.
 ' This formula has been succeeded by the 1994 and 2000 formulas because the CIELAB space turned out to be not as perceptually uniform as intended, especially in the saturated regions. This means that this formula rates these colors too highly as opposed to other colors.
 ' Hereafter, subscript 1 denotes the reference color and 2 denotes the color to be referenced.
 
