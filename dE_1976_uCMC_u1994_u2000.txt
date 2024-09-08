@@ -151,7 +151,6 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
     Dim inter1 As Double
     Dim inter2 As Double
     Dim inter3 As Double
-
     
     bignumber = 6103515625#
      
@@ -166,7 +165,6 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
     C1_prime = Sqr(a1_prime ^ 2 + b1 ^ 2)
     C2_prime = Sqr(a2_prime ^ 2 + b2 ^ 2)
     
-    
     If a1_prime = 0 And b1 = 0 Then
         h1_prime = 0
     Else
@@ -177,7 +175,6 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
         End If
     End If
 
-    
     If a2_prime = 0 And b2 = 0 Then
         h2_prime = 0
     Else
@@ -187,7 +184,6 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
             h2_prime = WorksheetFunction.Degrees(WorksheetFunction.Atan2(a2_prime, b2)) + 360
         End If
     End If
-    
     
     If (h2_prime - h1_prime) > 180 Then
         dhCond = 1
@@ -205,16 +201,13 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
         dh_prime = h2_prime + 360 - h1_prime
     End If
     
-
     dL_prime = L2 - L1
     dC_prime = C2_prime - C1_prime
     dHACHE_prime = 2 * Sqr(C1_prime * C2_prime) * _
         Sin(Application.WorksheetFunction.Radians(dh_prime / 2))
     
-    
     L_prime_avg = (L1 + L2) / 2
     C_prime_avg = (C1_prime + C2_prime) / 2
-    
     
     If C1_prime * C2_prime = 0 Then
         h_avgCond = 3
@@ -236,7 +229,6 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
         h_prime_avg = ((h1_prime + h2_prime) / 2) - 180
     End If
     
-    
     L_prime_temp = (L_prime_avg - 50) ^ 2
     
     S_L = 1 + (0.015 * L_prime_temp / Sqr(20 + L_prime_temp))
@@ -251,11 +243,9 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
     R_C = 2 * Sqr(C_prime_avg ^ 7 / (C_prime_avg ^ 7 + bignumber))
     R_T = -Sin(Application.WorksheetFunction.Radians(2 * dTheta)) * R_C
     
-    
     inter1 = dL_prime / S_L / k_L
     inter2 = dC_prime / S_C / k_C
     inter3 = dHACHE_prime / S_H / k_H
-    
     
     dE_2000 = Sqr(inter1 ^ 2 + inter2 ^ 2 + inter3 ^ 2 + (R_T * inter2 * inter3))
 End Function
