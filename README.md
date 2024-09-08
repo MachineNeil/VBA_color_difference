@@ -15,5 +15,5 @@ The implementation of the ΔE_2000 formula has been made possible thanks to the 
 As an example, this is a table with results where, for aesthetics, the decimals were truncated:
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MachineNeil/VBA_color_difference/main/Results.png"/>
+  <img src="https://raw.githubusercontent.com/MachineNeil/VBA_color_difference/main/resources/results.png"/>
 </p>
