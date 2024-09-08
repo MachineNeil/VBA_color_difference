@@ -8,7 +8,7 @@ Kindly see the comments in the txt file for an optimal use.
 
 <br>
 
-The implementation of the ΔE_2000 formula has been made possible thanks to the resources published by Mr. Gaurav Sharma, one of the developers of the formula, on his institutional [website](https://hajim.rochester.edu/ece/sites/gsharma/ciede2000/), which was very helpful given the real complexity of the algorithm.
+The implementation of the ΔE_2000 formula has been made possible thanks to the resources published by Mr. Gaurav Sharma, one of the developers of the formula, on his institutional [website](https://hajim.rochester.edu/ece/sites/gsharma/ciede2000/), which was very helpful given the real complexity of the algorithm. In the same vein, the [Wikipedia page](https://en.wikipedia.org/wiki/Color_difference) is full of convenient notes.
 
 <br>
 
