@@ -1,0 +1,264 @@
+'
+'
+'
+' dE_1976 = 2.3 -> JND (just noticeable difference).
+' This formula has been succeeded by the 1994 and 2000 formulas because the CIELAB space turned out to be not as perceptually uniform as intended, especially in the saturated regions. This means that this formula rates these colors too highly as opposed to other colors.
+' Hereafter, subscript 1 denotes the reference color and 2 denotes the color to be referenced.
+
+Function dE_1976(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As Double, b2 As Double) As Double
+    Dim da As Double
+    Dim debe As Double
+    Dim dL As Double
+
+    da = a2 - a1
+    debe = b2 - b1
+    dL = L2 - L1
+
+    dE_1976 = Sqr(dL ^ 2 + da ^ 2 + debe ^ 2)
+End Function
+
+
+
+'
+'
+'
+'
+'
+' lightness (l) : chroma (c) 1:1 -> imperceptibility; l:c 2:1 -> acceptability. This formula is designed to be used with D65 and the CIE SO.
+
+Function dE_CMC(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As Double, b2 As Double, Optional l As Double = 1, Optional c As Double = 1) As Double
+    Dim C1 As Double
+    Dim C2 As Double
+    Dim dC As Double
+    Dim dL As Double
+    Dim da As Double
+    Dim debe As Double
+    Dim F As Double
+    Dim h1 As Double
+    Dim T As Double
+    Dim S_C As Double
+    Dim S_H As Double
+    Dim S_L As Double
+    Dim dH As Double
+    
+    C1 = Sqr(a1 ^ 2 + b1 ^ 2)
+    C2 = Sqr(a2 ^ 2 + b2 ^ 2)
+    
+    dC = C2 - C1
+    dL = L2 - L1
+    da = a2 - a1
+    debe = b2 - b1
+    
+    F = Sqr((C1 ^ 4) / ((C1 ^ 4) + 1900))
+    
+    h1 = WorksheetFunction.Degrees(WorksheetFunction.Atan2(b1, a1))
+    
+    If h1 >= 164 And h1 <= 345 Then
+        T = 0.56 + Abs(0.2 * Cos(WorksheetFunction.Radians(h1 + 168)))
+    Else
+        T = 0.36 + Abs(0.4 * Cos(WorksheetFunction.Radians(h1 + 35)))
+    End If
+    
+    S_C = 0.638 + ((0.0638 * C1) / (1 + (0.0131 * C1)))
+    S_H = S_C * ((F * T) + 1 - F)
+    If L1 < 16 Then
+        S_L = 0.511
+    Else
+        S_L = (0.040975 * L1) / (1 + (0.01765 * L1))
+    End If
+     
+    dH = Sqr(da ^ 2 + debe ^ 2 - dC ^ 2)
+     
+    dE_CMC = Sqr((dL / (l * S_L)) ^ 2 + (dC / (c * S_C)) ^ 2 + (dH / S_H) ^ 2)
+    
+End Function
+
+
+
+'
+'
+'
+'
+'
+' (k_L, K1, K2) = (1, 0.045, 0.015) for graphic arts, (2, 0.048, 0.014) for textiles.
+
+Function dE_1994(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As Double, b2 As Double, Optional k_L As Double = 1, Optional k_C As Double = 1, Optional k_H As Double = 1, Optional K1 As Double = 0.045, Optional K2 As Double = 0.015) As Double
+    Dim da As Double
+    Dim debe As Double
+    Dim dL As Double
+    Dim C1 As Double
+    Dim C2 As Double
+    Dim dC As Double
+    Dim dH As Double
+    Dim S_L As Double
+    Dim S_C As Double
+    Dim S_H As Double
+    
+    da = a2 - a1
+    debe = b2 - b1
+    dL = L2 - L1
+    
+    C1 = Sqr(a1 ^ 2 + b1 ^ 2)
+    C2 = Sqr(a2 ^ 2 + b2 ^ 2)
+    dC = C2 - C1
+    
+    dH = Sqr(da ^ 2 + debe ^ 2 - dC ^ 2)
+    
+    S_L = 1
+    S_C = 1 + (K1 * C1)
+    S_H = 1 + (K2 * C1)
+    
+    dE_1994 = Sqr((dL / (k_L * S_L)) ^ 2 + (dC / (k_C * S_C)) ^ 2 + (dH / (k_H * S_H)) ^ 2)
+End Function
+
+
+
+'
+'
+'
+'
+'
+'
+
+Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As Double, b2 As Double, Optional k_L As Double = 1, Optional k_C As Double = 1, Optional k_H As Double = 1) As Double
+    Dim bignumber As Double
+    Dim C1 As Double
+    Dim C2 As Double
+    Dim C_avg As Double
+    Dim G As Double
+    Dim a1_prime As Double
+    Dim a2_prime As Double
+    Dim C1_prime As Double
+    Dim C2_prime As Double
+    Dim h1_prime As Double
+    Dim h2_prime As Double
+    Dim dhCond As Integer
+    Dim dh_prime As Double
+    Dim dL_prime As Double
+    Dim dC_prime As Double
+    Dim dHACHE_prime As Double
+    Dim L_prime_avg As Double
+    Dim C_prime_avg As Double
+    Dim h_avgCond As Integer
+    Dim h_prime_avg As Double
+    Dim L_prime_temp As Double
+    Dim S_L As Double
+    Dim S_C As Double
+    Dim T As Double
+    Dim S_H As Double
+    Dim dTheta As Double
+    Dim R_C As Double
+    Dim R_T As Double
+    Dim inter1 As Double
+    Dim inter2 As Double
+    Dim inter3 As Double
+
+    
+    bignumber = 6103515625#
+     
+    C1 = Sqr(a1 ^ 2 + b1 ^ 2)
+    C2 = Sqr(a2 ^ 2 + b2 ^ 2)
+    C_avg = (C1 + C2) / 2
+    
+    G = 0.5 * (1 - Sqr(C_avg ^ 7 / (C_avg ^ 7 + bignumber)))
+    a1_prime = a1 * (1 + G)
+    a2_prime = a2 * (1 + G)
+    
+    C1_prime = Sqr(a1_prime ^ 2 + b1 ^ 2)
+    C2_prime = Sqr(a2_prime ^ 2 + b2 ^ 2)
+    
+    
+    If a1_prime = 0 And b1 = 0 Then
+        h1_prime = 0
+    Else
+        If b1 >= 0 Then
+            h1_prime = WorksheetFunction.Degrees(WorksheetFunction.Atan2(a1_prime, b1))
+        Else
+            h1_prime = WorksheetFunction.Degrees(WorksheetFunction.Atan2(a1_prime, b1)) + 360
+        End If
+    End If
+
+    
+    If a2_prime = 0 And b2 = 0 Then
+        h2_prime = 0
+    Else
+        If b2 >= 0 Then
+            h2_prime = WorksheetFunction.Degrees(WorksheetFunction.Atan2(a2_prime, b2))
+        Else
+            h2_prime = WorksheetFunction.Degrees(WorksheetFunction.Atan2(a2_prime, b2)) + 360
+        End If
+    End If
+    
+    
+    If (h2_prime - h1_prime) > 180 Then
+        dhCond = 1
+    ElseIf (h2_prime - h1_prime) < -180 Then
+        dhCond = 2
+    Else
+        dhCond = 0
+    End If
+    
+    If dhCond = 0 Then
+        dh_prime = h2_prime - h1_prime
+    ElseIf dhCond = 1 Then
+        dh_prime = h2_prime - h1_prime - 360
+    Else
+        dh_prime = h2_prime + 360 - h1_prime
+    End If
+    
+
+    dL_prime = L2 - L1
+    dC_prime = C2_prime - C1_prime
+    dHACHE_prime = 2 * Sqr(C1_prime * C2_prime) * _
+        Sin(Application.WorksheetFunction.Radians(dh_prime / 2))
+    
+    
+    L_prime_avg = (L1 + L2) / 2
+    C_prime_avg = (C1_prime + C2_prime) / 2
+    
+    
+    If C1_prime * C2_prime = 0 Then
+        h_avgCond = 3
+    ElseIf Abs(h2_prime - h1_prime) <= 180 Then
+        h_avgCond = 0
+    ElseIf (h2_prime + h1_prime) < 360 Then
+        h_avgCond = 1
+    Else
+        h_avgCond = 2
+    End If
+    
+    If h_avgCond = 3 Then
+        h_prime_avg = h1_prime + h2_prime
+    ElseIf h_avgCond = 0 Then
+        h_prime_avg = (h1_prime + h2_prime) / 2
+    ElseIf h_avgCond = 1 Then
+        h_prime_avg = ((h1_prime + h2_prime) / 2) + 180
+    Else
+        h_prime_avg = ((h1_prime + h2_prime) / 2) - 180
+    End If
+    
+    
+    L_prime_temp = (L_prime_avg - 50) ^ 2
+    
+    S_L = 1 + (0.015 * L_prime_temp / Sqr(20 + L_prime_temp))
+    S_C = 1 + (0.045 * C_prime_avg)
+    T = 1 - 0.17 * Cos(Application.WorksheetFunction.Radians(h_prime_avg - 30)) _
+            + 0.24 * Cos(Application.WorksheetFunction.Radians(2 * h_prime_avg)) _
+            + 0.32 * Cos(Application.WorksheetFunction.Radians(3 * h_prime_avg + 6)) _
+            - 0.2 * Cos(Application.WorksheetFunction.Radians(4 * h_prime_avg - 63))
+    S_H = 1 + (0.015 * T * C_prime_avg)
+    
+    dTheta = 30 * Exp(-1 * ((h_prime_avg - 275) / 25) ^ 2)
+    R_C = 2 * Sqr(C_prime_avg ^ 7 / (C_prime_avg ^ 7 + bignumber))
+    R_T = -Sin(Application.WorksheetFunction.Radians(2 * dTheta)) * R_C
+    
+    
+    inter1 = dL_prime / S_L / k_L
+    inter2 = dC_prime / S_C / k_C
+    inter3 = dHACHE_prime / S_H / k_H
+    
+    
+    dE_2000 = Sqr(inter1 ^ 2 + inter2 ^ 2 + inter3 ^ 2 + (R_T * inter2 * inter3))
+
+End Function
+
