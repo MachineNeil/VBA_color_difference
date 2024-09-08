@@ -70,7 +70,6 @@ Function dE_CMC(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As Do
     dH = Sqr(da ^ 2 + debe ^ 2 - dC ^ 2)
      
     dE_CMC = Sqr((dL / (l * S_L)) ^ 2 + (dC / (c * S_C)) ^ 2 + (dH / S_H) ^ 2)
-    
 End Function
 
 
@@ -259,6 +258,5 @@ Function dE_2000(L1 As Double, a1 As Double, b1 As Double, L2 As Double, a2 As D
     
     
     dE_2000 = Sqr(inter1 ^ 2 + inter2 ^ 2 + inter3 ^ 2 + (R_T * inter2 * inter3))
-
 End Function
 
